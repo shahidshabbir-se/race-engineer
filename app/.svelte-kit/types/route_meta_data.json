@@ -1,12 +1,5 @@
 {
-	"/": [
-		"src/routes/+layout.ts",
-		"src/routes/+layout.ts"
-	],
-	"/dashboard": [
-		"src/routes/+layout.ts"
-	],
-	"/platform": [
-		"src/routes/+layout.ts"
-	]
+	"/": ["src/routes/+layout.ts", "src/routes/+layout.ts"],
+	"/dashboard": ["src/routes/+layout.ts"],
+	"/platform": ["src/routes/+layout.ts"]
 }

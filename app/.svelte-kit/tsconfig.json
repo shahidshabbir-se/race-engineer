@@ -1,48 +1,21 @@
 {
 	"compilerOptions": {
 		"paths": {
-			"$components": [
-				"../src/components"
-			],
-			"$components/*": [
-				"../src/components/*"
-			],
-			"$lib": [
-				"../src/lib"
-			],
-			"$lib/*": [
-				"../src/lib/*"
-			],
-			"$stores": [
-				"../src/stores"
-			],
-			"$stores/*": [
-				"../src/stores/*"
-			],
-			"$utils": [
-				"../src/utils"
-			],
-			"$utils/*": [
-				"../src/utils/*"
-			],
-			"$assets": [
-				"../src/assets"
-			],
-			"$assets/*": [
-				"../src/assets/*"
-			]
+			"$components": ["../src/components"],
+			"$components/*": ["../src/components/*"],
+			"$lib": ["../src/lib"],
+			"$lib/*": ["../src/lib/*"],
+			"$stores": ["../src/stores"],
+			"$stores/*": ["../src/stores/*"],
+			"$utils": ["../src/utils"],
+			"$utils/*": ["../src/utils/*"],
+			"$assets": ["../src/assets"],
+			"$assets/*": ["../src/assets/*"]
 		},
-		"rootDirs": [
-			"..",
-			"./types"
-		],
+		"rootDirs": ["..", "./types"],
 		"verbatimModuleSyntax": true,
 		"isolatedModules": true,
-		"lib": [
-			"esnext",
-			"DOM",
-			"DOM.Iterable"
-		],
+		"lib": ["esnext", "DOM", "DOM.Iterable"],
 		"moduleResolution": "bundler",
 		"module": "esnext",
 		"noEmit": true,

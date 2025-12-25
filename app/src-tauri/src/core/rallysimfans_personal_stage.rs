@@ -1,7 +1,7 @@
+use super::data_loader;
 use ini::Ini;
 use serde::{Deserialize, Serialize};
 use tauri::AppHandle;
-use super::data_loader;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Stage {
@@ -19,7 +19,8 @@ pub struct Stage {
 
 #[tauri::command]
 pub fn get_stage(app_handle: AppHandle) -> Result<String, String> {
-    let stage_ini_path = data_loader::get_data_path(&app_handle, "FILE_RALLYSIMFANS_PERSONAL_STAGE")?;
+    let stage_ini_path =
+        data_loader::get_data_path(&app_handle, "FILE_RALLYSIMFANS_PERSONAL_STAGE")?;
 
     let conf = Ini::load_from_file(&stage_ini_path)
         .map_err(|e| format!("Failed to load stage.ini file: {}", e))?;

@@ -1,6 +1,6 @@
+use super::data_loader;
 use serde::{Deserialize, Serialize};
 use tauri::AppHandle;
-use super::data_loader;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Car {

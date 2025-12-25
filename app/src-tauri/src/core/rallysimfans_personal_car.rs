@@ -1,7 +1,7 @@
+use super::data_loader;
 use ini::Ini;
 use serde::{Deserialize, Serialize};
 use tauri::AppHandle;
-use super::data_loader;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct CarOptions {

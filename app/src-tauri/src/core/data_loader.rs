@@ -8,8 +8,8 @@ use tauri::{AppHandle, Manager};
 pub fn get_data_path(app_handle: &AppHandle, file_env_key: &str) -> Result<PathBuf, String> {
     dotenv::dotenv().ok();
 
-    let file_name = env::var(file_env_key)
-        .map_err(|_| format!("Missing `{}` in .env file", file_env_key))?;
+    let file_name =
+        env::var(file_env_key).map_err(|_| format!("Missing `{}` in .env file", file_env_key))?;
 
     // Try to get the configured RBR directory
     let store_path = app_handle
@@ -31,9 +31,9 @@ pub fn get_data_path(app_handle: &AppHandle, file_env_key: &str) -> Result<PathB
     }
 
     // Fallback to sample data
-    let current_dir = env::current_dir()
-        .map_err(|e| format!("Failed to get current directory: {}", e))?;
-    
+    let current_dir =
+        env::current_dir().map_err(|e| format!("Failed to get current directory: {}", e))?;
+
     // Go up from src-tauri to project root, then to data/rbr.samples
     let sample_path = current_dir
         .parent()
@@ -57,6 +57,5 @@ pub fn get_data_path(app_handle: &AppHandle, file_env_key: &str) -> Result<PathB
 /// Helper function to read file content with fallback to sample data
 pub fn read_data_file(app_handle: &AppHandle, file_env_key: &str) -> Result<String, String> {
     let path = get_data_path(app_handle, file_env_key)?;
-    fs::read_to_string(&path)
-        .map_err(|e| format!("Failed to read file {:?}: {}", path, e))
+    fs::read_to_string(&path).map_err(|e| format!("Failed to read file {:?}: {}", path, e))
 }
