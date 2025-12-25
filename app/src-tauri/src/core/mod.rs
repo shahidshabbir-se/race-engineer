@@ -3,6 +3,7 @@ pub mod car_data;
 pub mod car_group_map;
 pub mod car_groups;
 pub mod car_models;
+pub mod data_loader;
 pub mod rallysimfans_personal_car;
 pub mod rallysimfans_personal_stage;
 pub mod settings;

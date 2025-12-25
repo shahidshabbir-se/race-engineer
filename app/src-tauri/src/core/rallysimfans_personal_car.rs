@@ -1,9 +1,7 @@
 use ini::Ini;
 use serde::{Deserialize, Serialize};
-use std::env;
-use std::fs;
-use std::path::Path;
-use tauri::{AppHandle, Manager};
+use tauri::AppHandle;
+use super::data_loader;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct CarOptions {
@@ -27,29 +25,7 @@ pub struct CarOptions {
 
 #[tauri::command]
 pub fn get_car_options(app_handle: AppHandle) -> Result<String, String> {
-    dotenv::dotenv().ok();
-
-    let store_path = app_handle
-        .path()
-        .app_data_dir()
-        .unwrap()
-        .join("settings.json");
-
-    let settings_json = fs::read_to_string(&store_path)
-        .map_err(|e| format!("Failed to read settings.json: {}", e))?;
-
-    let settings_dir: serde_json::Value = serde_json::from_str(&settings_json)
-        .map_err(|e| format!("Failed to parse settings.json: {}", e))?;
-
-    let dir_path = settings_dir
-        .get("rbr_directory")
-        .and_then(|v| v.as_str())
-        .ok_or("Missing rbr_directory in settings.json")?;
-
-    let car_ini_file = env::var("FILE_RALLYSIMFANS_PERSONAL")
-        .map_err(|_| "Missing FILE_RALLYSIMFANS_PERSONAL in .env".to_string())?;
-
-    let car_ini_path = Path::new(dir_path).join(car_ini_file);
+    let car_ini_path = data_loader::get_data_path(&app_handle, "FILE_RALLYSIMFANS_PERSONAL")?;
 
     let conf = Ini::load_from_file(&car_ini_path)
         .map_err(|e| format!("Failed to load .ini file: {}", e))?;

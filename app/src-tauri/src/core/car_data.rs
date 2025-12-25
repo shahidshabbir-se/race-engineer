@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
-use std::{env, fs, path::Path};
-use tauri::{AppHandle, Manager};
+use tauri::AppHandle;
+use super::data_loader;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct CarData {
@@ -23,32 +23,7 @@ pub struct CarData {
 
 #[tauri::command]
 pub fn get_car_data(app_handle: AppHandle) -> Result<String, String> {
-    dotenv::dotenv().ok();
-
-    let store_path = app_handle
-        .path()
-        .app_data_dir()
-        .unwrap()
-        .join("settings.json");
-
-    let settings_json = fs::read_to_string(&store_path)
-        .map_err(|e| format!("Failed to read settings.json: {}", e))?;
-
-    let settings_dir: serde_json::Value = serde_json::from_str(&settings_json)
-        .map_err(|e| format!("Failed to parse settings.json: {}", e))?;
-
-    let dir_path = settings_dir
-        .get("rbr_directory")
-        .and_then(|v| v.as_str())
-        .ok_or("Missing rbr_directory in settings.json")?;
-
-    let car_data_file_name = env::var("FILE_CARS_DATA")
-        .map_err(|_| "Missing `FILE_CARS_DATA` in .env file".to_string())?;
-
-    let car_data_path = Path::new(dir_path).join(car_data_file_name);
-
-    let raw = fs::read_to_string(&car_data_path)
-        .map_err(|e| format!("Failed to read car data JSON file: {}", e))?;
+    let raw = data_loader::read_data_file(&app_handle, "FILE_CARS_DATA")?;
 
     let car_data_list: Vec<CarData> =
         serde_json::from_str(&raw).map_err(|e| format!("Failed to parse car data JSON: {}", e))?;

@@ -1,7 +1,6 @@
 use serde::{Deserialize, Serialize};
-use serde_json;
-use std::{env, fs, path::Path};
-use tauri::{AppHandle, Manager};
+use tauri::AppHandle;
+use super::data_loader;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct StageData {
@@ -23,43 +22,10 @@ pub struct StageData {
 
 #[tauri::command]
 pub fn get_stages_data(app_handle: AppHandle) -> Result<String, String> {
-    dotenv::dotenv().ok();
+    let stages_json = data_loader::read_data_file(&app_handle, "FILE_STAGES_DATA")?;
 
-    // Path to the settings.json file
-    let store_path = app_handle
-        .path()
-        .app_data_dir()
-        .unwrap()
-        .join("settings.json");
-
-    // Read settings.json file
-    let settings_json = fs::read_to_string(store_path)
-        .map_err(|e| format!("Failed to read settings.json: {}", e))?;
-
-    // Parse the settings.json content
-    let settings_dir: serde_json::Value = serde_json::from_str(&settings_json)
-        .map_err(|e| format!("Failed to parse settings.json: {}", e))?;
-
-    // Get the directory for RBR data from the settings
-    let dir_path = settings_dir
-        .get("rbr_directory")
-        .and_then(|v| v.as_str())
-        .unwrap_or_default();
-
-    // Get the file name of the stage data JSON file from the environment
-    let stages_file_name = env::var("FILE_STAGES_DATA")
-        .map_err(|_| "Missing `FILE_STAGES_DATA` in .env file".to_string())?;
-
-    let stages_json_path = Path::new(dir_path).join(stages_file_name);
-
-    // Read the stages JSON file
-    let stages_json = fs::read_to_string(&stages_json_path)
-        .map_err(|e| format!("Failed to read stages data JSON file: {}", e))?;
-
-    // Deserialize the JSON into a vector of StageData structs
     let stages: Vec<StageData> = serde_json::from_str(&stages_json)
         .map_err(|e| format!("Failed to parse stages data JSON: {}", e))?;
 
-    // Serialize the stages vector to a JSON string
     serde_json::to_string(&stages).map_err(|e| format!("Serialization failed: {}", e))
 }
